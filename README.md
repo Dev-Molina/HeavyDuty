@@ -1,0 +1,14 @@
+# Heavy Duty
+#### Video Demo: <https://youtu.be/HUuVDZ1W-jA>
+#### Description:
+
+My name is Marcio Molina, I live in Atlanta, Georgia as mentioned in the video. I started cs50 around last September if I recall correctly. 
+Anyway throughout my programming journey, there have been many ups and downs, including taking many breaks from CS50, but overall it has been worth it. Aside from learning to code, I have also picked up new hobbies to stay healthy. One of my new hobbies is weight training. Because of this, I have decided to name my project Heavy Duty, an inspiration from Mike Mentzer's Workout routine. During this time I have been researching how to build muscles optimally and effectively. As my journey into weightlifting and programming both grew they met paths at this final project. 
+
+This index.html page or the home page. This page allows you to make and store your favorite workout routine for easy access when you're hitting those personal records at the gym. This way you save more time at the gym by being able to rapidly access your workouts for that day.
+
+Next on workout.html we have our workout log page! This page gives us the ability to log each workout for that current day, or gym session. This allows you to keep track of your exercises without having to carry a physical journal at the gym. As I mentioned previously this information can be used to monitor your progressive overload, by tweaking your routine or calories accordingly and helping you build more muscle in the long run.
+
+Next up we have we have the BMR Calculator on the BMR.html page. BMR stands for basic metabolic rate. This calculator helps you find out how many calories your body burns on its own every 24 hours. The cool thing about this calculator is it also takes into consideration the amount of calories you burn based on your activity level. This allows you to find a good caloric intake based on your goals and the body you want. Then slowly fine-tune it to perfection, to get the desired results. To lose weight for example you could subtract calories 500 calories from your daily caloric needs to lose about 1 pound of body fat per week.
+
+Lastly, we have the workout history page or the history.html page. This is where every workout log you submit gets sent to. This is also where you can access your past workouts. Here you can look at old workouts as well as current workouts. You can also choose from any workouts you want and compare them side by side. This allows you to measure your progress, and more accurately track things. On this page you can also filter workouts by various options. The first option by default shows all the workouts in your workout history. The other option is previous workouts which shows the previous workout session's log. On this page you also get the ability to delete workouts that you no longer need to save up space.

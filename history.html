@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Workout History</title>
+
+    <!-- bootstrap css -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+
+    <!-- bootstrap js -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+        crossorigin="anonymous"></script>
+
+    <!-- navbar js -->
+    <script src="navbar.js" defer></script>
+
+    <!-- bg img/styling -->
+    <style>
+        body {
+            background-image: url('assets/heavyduty.jpg');
+            /* Replace 'your-image-url.jpg' with the path to your image */
+            background-size: cover;
+            background-position: center px;
+            background-repeat: no-repeat;
+        }
+
+        #compareLabel {
+            color: white;
+            /* Set the text color to white for this specific label */
+        }
+
+        .no-workouts-message {
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="workout-history-container">
+
+            <!-- "workout history" with typewriter effect -->
+            <h1 id="typewriter" class="text-center text-white"></h1>
+
+            <!-- drop down to pick workout category -->
+            <label id="compareLabel">Select workouts to compare:</label>
+            <select id="compareDropdown" onchange="displayWorkoutHistory()">
+                <option value="all">All Workouts</option>
+                <option value="previous">Previous Workouts</option>
+                <option value="current">Current Workouts</option>
+                <option value="previousCurrent">Previous/Current</option>
+            </select>
+
+            <!-- Display area for workout list -->
+            <div id="workout-list" class="row"></div>
+
+            <!-- Buttons to compare and delete selected workouts -->
+            <button onclick="compareSelectedWorkouts()" class="btn btn-primary btn-sm mb-4">Compare Selected</button>
+            <button onclick="deleteSelectedWorkouts()" class="btn btn-danger btn-sm mb-4">Delete Selected</button>
+        </div>
+    </div>
+
+    <!-- Include main script -->
+    <script src="script.js"></script>
+    <script>
+        // Initial display of workout history
+        displayWorkoutHistory()
+
+        // Display workout history based on the category selected
+        function displayWorkoutHistory() {
+            const workoutListContainer = document.getElementById('workout-list');
+            const compareDropdown = document.getElementById('compareDropdown');
+            const selectedCategory = compareDropdown.value;
+
+            // Get workouts from local storage
+            const workouts = JSON.parse(localStorage.getItem('workouts')) || [];
+
+            // filter workouts based on category
+            let filteredWorkouts = [];
+            if (selectedCategory === 'all') {
+                filteredWorkouts = workouts;
+            } else if (selectedCategory === 'previous') {
+                // Find the latest workout date
+                const latestDate = new Date(Math.max(...workouts.map(workout => new Date(workout.date))));
+
+                // Find the workout prior to the latest
+                const priorDate = new Date(latestDate);
+                priorDate.setDate(latestDate.getDate() - 1);
+
+                // Filter workouts by prior workouts
+                filteredWorkouts = workouts.filter(workout => {
+                    const workoutDate = new Date(workout.date);
+                    return workoutDate.toDateString() === priorDate.toDateString();
+                });
+            } else if (selectedCategory === 'current') {
+                // Find the latest workout
+                const latestDate = new Date(Math.max(...workouts.map(workout => new Date(workout.date))));
+
+                // Filter by latest workouts
+                filteredWorkouts = workouts.filter(workout => {
+                    const workoutDate = new Date(workout.date);
+                    return workoutDate.toDateString() === latestDate.toDateString();
+                });
+            } else if (selectedCategory === 'previousCurrent') {
+                // Find latest workout date
+                const latestDate = new Date(Math.max(...workouts.map(workout => new Date(workout.date))));
+
+                // Find prior workout date
+                const priorDate = new Date(latestDate);
+                priorDate.setDate(latestDate.getDate() - 1);
+
+                // Filter workouts to display prior and latest workouts
+                filteredWorkouts = workouts.filter(workout => {
+                    const workoutDate = new Date(workout.date);
+                    return (
+                        workoutDate.toDateString() === latestDate.toDateString() ||
+                        workoutDate.toDateString() === priorDate.toDateString()
+                    );
+                });
+            }
+
+            // Display each workout with checkboxes
+            if (filteredWorkouts.length === 0) {
+                workoutListContainer.innerHTML = '<p class="no-workouts-message" >No workouts recorded yet.</p>';
+            } else {
+                workoutListContainer.innerHTML = '';
+                filteredWorkouts.forEach((workout, index) => {
+                    workoutListContainer.innerHTML += `
+                        <div class="col-md-6 mb-3 mt-3">
+                            <div class="card shadow">
+                                <div class="card-header text-white bg-dark d-flex align-items-center">
+                                    <div class="form-check checkbox-container">
+                                        <input type="checkbox" class="form-check-input " name="compareCheckbox" value="${index}">
+                                    </div>
+                                    <h4 class="text-center flex-grow-1">${capitalized(workout.exercise)}</h4>
+                                </div>
+                                <div class="card-body">
+                                    <p class="card-text"><strong>Sets:</strong> ${workout.sets}</p>
+                                    <p class="card-text"><strong>Max Reps:</strong> ${workout.maxReps}</p>
+                                    <p class="card-text"><strong>Weight (lbs):</strong> ${workout.weightLbs}</p>
+                                    <p class="card-text"><strong>Warm-up Sets:</strong> ${workout.warmUpSets}</p>
+                                    <p class="card-text"><strong>Date:</strong> ${workout.date}</p>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                });
+            }
+        }
+        //Compares selected workouts
+        function compareSelectedWorkouts() {
+            const workoutListContainer = document.getElementById('workout-list');
+            const checkboxes = document.getElementsByName('compareCheckbox');
+            const selectedWorkouts = [];
+
+            // Collects the selected workouts
+            checkboxes.forEach((checkbox, index) => {
+                if (checkbox.checked) {
+                    const workout = JSON.parse(localStorage.getItem('workouts'))[index];
+                    selectedWorkouts.push(workout);
+                }
+            });
+
+            // Displays the selected workouts
+            if (selectedWorkouts.length === 0) {
+                workoutListContainer.innerHTML = '<p>No workouts selected for comparison.</p>';
+            } else {
+                workoutListContainer.innerHTML = '<ul>';
+                selectedWorkouts.forEach((workout) => {
+                    workoutListContainer.innerHTML += `
+                        <div class="col-md-6 mb-3 mt-3">
+                            <div class="card shadow">
+                                <div class="card-header text-white bg-dark d-flex align-items-center">
+                                    <div class="form-check checkbox-container">
+                                        <input type="checkbox" class="form-check-input " name="compareCheckbox" value="${index}">
+                                    </div>
+                                    <h4 class="text-center flex-grow-1">${capitalized(workout.exercise)}</h4>
+                                </div>
+                                <div class="card-body">
+                                    <p class="card-text"><strong>Sets:</strong> ${workout.sets}</p>
+                                    <p class="card-text"><strong>Max Reps:</strong> ${workout.maxReps}</p>
+                                    <p class="card-text"><strong>Weight (lbs):</strong> ${workout.weightLbs}</p>
+                                    <p class="card-text"><strong>Warm-up Sets:</strong> ${workout.warmUpSets}</p>
+                                    <p class="card-text"><strong>Date:</strong> ${workout.date}</p>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                });
+                workoutListContainer.innerHTML += '</ul>';
+            }
+        }
+
+        // Deletes selected workouts
+        function deleteSelectedWorkouts() {
+            const checkboxes = document.getElementsByName('compareCheckbox');
+            const workouts = JSON.parse(localStorage.getItem('workouts')) || [];
+            const updatedWorkouts = [];
+
+            checkboxes.forEach((checkbox, index) => {
+                if (!checkbox.checked) {
+                    updatedWorkouts.push(workouts[index]);
+                }
+            });
+
+            // updates workouts in the local storage
+            localStorage.setItem('workouts', JSON.stringify(updatedWorkouts));
+            
+            //displays the updated workout history
+            displayWorkoutHistory();
+        }
+
+        // Typewriter effect for header "Workout History"
+        const textElement = document.getElementById('typewriter');
+        const text = "Workout History";
+        let index = 0;
+
+        function type() {
+            if (index < text.length) {
+                textElement.innerHTML += text.charAt(index);
+                index++;
+                setTimeout(type, 100); // Adjust the typing speed here
+            }
+        }
+
+        type();
+
+    </script>
+</body>
+
+</html>

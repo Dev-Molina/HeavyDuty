@@ -1,0 +1,100 @@
+header {
+    background-color: #141414;
+    padding: 20px;
+}
+
+.apple-style {
+    color: #fff;
+}
+
+.calculator-container {
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+    margin-top: 30px;
+}
+
+label {
+    display: block;
+    margin-top: 15px;
+    font-size: 16px;
+    color: #333;
+}
+
+input,
+select {
+    width: 100%;
+    padding: 12px;
+    margin-top: 5px;
+    margin-bottom: 15px;
+    box-sizing: border-box;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+button {
+    background-color: #4caf50;
+    color: #fff;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+button:hover {
+    background-color: #45a049;
+}
+
+#result {
+    margin-top: 30px;
+    font-size: 18px;
+    color: #333;
+}
+
+.workout-history-container {
+    text-align: center;
+}
+
+.nav-button {
+    background-color: #000;
+    color: #fff;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-right: 10px;
+}
+
+.remove-button {
+    background-color: #ff0000;
+    color: #fff;
+    padding: 6px 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    margin-top: 5px;
+}
+
+.logo {
+    width: 100x;
+    /* Adjust the width according to your design */
+    height: auto;
+    /* Maintain aspect ratio */
+    margin-right: 10px;
+    /* Adjust spacing as needed */
+}
+
+
+.outlined-letter {
+    display: inline-block;
+    padding: 0.2em 0.4em;
+    background-color: white;
+    border: 2px solid black;
+    border-radius: 0.25em;
+    margin-right: 0.3em;
+}
+
